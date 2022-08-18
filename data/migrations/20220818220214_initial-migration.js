@@ -13,10 +13,26 @@ exports.up = function (knex) {
             tbl.varchar('ingredient_unit', 100)
         })
         .createTable('steps', tbl => {
-            tbl.increments()
+            tbl.increments('step_id')
+            tbl.varchar('step_instructions', 200)
+                .notNullable()
+            tbl.integer('step_number', 100)
+                .notNullable()
+            tbl.integer('recipe_id')
+                .unsigned()
+                .notNullable()
+                .references('recipe_id')
+                .inTable('recipes')
+                .onDelete('RESTRICT')
         })
         .createTable('step_ingredients', tbl => {
-            tbl.increments()
+            tbl.increments('step_ingredients_id')
+            tbl.integer('step_id')
+                .unsigned()
+                .notNullable()
+                .references('ingredient_id')
+                .inTable('ingredients')
+                .onDelete('RESTRICT')
         });
 };
 
