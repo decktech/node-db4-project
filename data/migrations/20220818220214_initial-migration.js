@@ -26,20 +26,28 @@ exports.up = function (knex) {
                 .onDelete('RESTRICT')
         })
         .createTable('step_ingredients', tbl => {
-            tbl.increments('step_ingredients_id')
             tbl.integer('step_id')
+                .unsigned()
+                .notNullable()
+                .references('step_id')
+                .inTable('steps')
+                .onDelete('RESTRICT')
+            tbl.integer('ingredient_id')
                 .unsigned()
                 .notNullable()
                 .references('ingredient_id')
                 .inTable('ingredients')
                 .onDelete('RESTRICT')
+            tbl.integer('quantity')
+                .unsigned()
+                .notNullable()
         });
 };
 
 exports.down = function (knex) {
     return knex.schema
-        .dropTableIfExists('recipes')
-        .dropTableIfExists('ingredients')
+        .dropTableIfExists('step_ingredients')
         .dropTableIfExists('steps')
-        .dropTableIfExists('step_ingredients');
+        .dropTableIfExists('ingredients')
+        .dropTableIfExists('recipes');
 };
